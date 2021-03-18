@@ -318,7 +318,8 @@ while True:
  							press 5: Get Deployments..
  							press 6: Get services.......
  							press 7: Get Build configure
- 							press 8: Exit
+ 							press 8: Describe the Openshift pods.
+ 							press 9: Exit
  							""")
  						oc_login=int(input())
  						if oc_login == 1:
@@ -338,6 +339,9 @@ while True:
  						elif oc_login == 7:
  							os.system("oc get bc")
  						elif oc_login == 8:
+ 							oc_des=input("Enter the Openshift Pods name: ")
+ 							os.system("oc describe pods " + oc_des)
+ 						elif oc_login == 9:
  							break
  						else:
  							print("Press key is not Use full")

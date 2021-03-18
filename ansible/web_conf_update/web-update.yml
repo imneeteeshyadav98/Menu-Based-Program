@@ -6,15 +6,24 @@
     package:
       name: "httpd"
       state: present
-  - copy:
-      content: "Hii this is Neetesh Yadav. How are you bro"
-      dest: /var/www/html/index.html
     register: x
-  - copy:
-      dest: /etc/httpd/conf.d
+  - name: document root dir
+    file:
+      state: directory
+      dest: "/var/www/neetesh"
+    register: y
+  - name: configure web Server
+    copy:
+      dest: /etc/httpd/conf.d/neetesh.conf
       src: "neetesh.conf"
+    when: x.rc == 0
+    notify: service httpd      
+  - name: copy web page 
+    copy:
+      dest: "var/www/neetesh/index.html"
+      src: "/root/python-specilist/Menu-Program/ansible/web_conf_update/index.html"
+    when: y.failed == true
   - name: start httpd service
     service:
       name: "httpd"
       state: restarted
-    when: x.changed 
