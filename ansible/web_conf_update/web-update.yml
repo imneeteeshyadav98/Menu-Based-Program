@@ -1,0 +1,20 @@
+- hosts: web
+  tasks:
+  - debug:
+      msg: Configure Httpd Server
+  - name: httpd package insttaltion
+    package:
+      name: "httpd"
+      state: present
+  - copy:
+      content: "Hii this is Neetesh Yadav. How are you bro"
+      dest: /var/www/html/index.html
+    register: x
+  - copy:
+      dest: /etc/httpd/conf.d
+      src: "neetesh.conf"
+  - name: start httpd service
+    service:
+      name: "httpd"
+      state: restarted
+    when: x.changed 

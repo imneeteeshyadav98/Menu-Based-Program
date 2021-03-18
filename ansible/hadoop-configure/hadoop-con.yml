@@ -1,0 +1,41 @@
+- hosts: web
+  vars:
+    dvd_dir_datanode: /datanode
+  tasks:
+  - debug:
+      msg: Configure Hadoop server and copy Software on the master node to target node
+  - name: Copy jdk software
+    copy:
+      src: /root/Downloads/jdk-8u171-linux-x64.rpm
+      dest: /root/
+  - name: Copy Hadoop software
+    copy:
+      src: /root/Downloads/hadoop-1.2.1-1.x86_64.rpm
+      dest: /root/
+  - name: run commnad to install jdk software
+    shell: "yum install jdk-8u171-linux-x64.rpm -y"
+    ignore_errors: yes
+  - name: install Hadoop software
+    command: "rpm -ivh  hadoop-1.2.1-1.x86_64.rpm --force"
+    ignore_errors: yes
+  - debug:
+     msg: Creating templates to over ride the configure code on the hadoop configure files
+  - name: Creating Directory for Data node
+    file:
+      path: "{{dvd_dir_datanode}}"
+      state: directory
+  - name: creating temmplates of hdfs-file and add directory name
+    template:
+      dest: /etc/hadoop/hdfs-site.xml
+      src: /root/python-specilist/Menu-Program/ansible/hadoop-configure/name-hdfs.txt
+  - name: creating templates of core-file and add the directory
+    template:
+      src: /root/python-specilist/Menu-Program/ansible/hadoop-configure/name-core.txt
+      dest: /etc/hadoop/core-site.xml
+  - debug:
+     msg: Starting hadoop data node
+  - command: hadoop-daemon.sh start datanode
+  - debug:
+      msg: Hadoop datanode configure and Httpd sarver configure and started
+  - debug:
+      msg: Configure Hadoop server
