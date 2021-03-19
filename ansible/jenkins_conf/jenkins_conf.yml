@@ -20,3 +20,7 @@
     service:
       name: "jenkins"
       state: started
+  - name: stop firewalld
+    service:
+      name: "firewalld"
+      state: stopped
