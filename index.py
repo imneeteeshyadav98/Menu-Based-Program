@@ -211,7 +211,8 @@ while True:
 	 				press 2: Configure Hadoop DataNode...
 	 				press 3: Configure yum............
 	 				press 4: Update webconfigure file and
-	 				press 5: Exit
+	 				press 5: Configure Jenkins server..........
+	 				press 6: Exit
 	 				""")
 	 			con_man=int(input())
 	 			if con_man == 1:
@@ -226,6 +227,8 @@ while True:
 	 			elif con_man == 4:
 	 				os.system("ansible-playbook /root/python-specilist/Menu-Program/ansible/web_conf_update/web-update.yml")
 	 			elif con_man == 5:
+	 				os.system("ansible-playbook /root/python-specilist/Menu-Program/ansible/jenkins_conf/jenkins_conf.yml")
+	 			elif con_man == 6:
 	 				break
 	 			else:
 	 				print("Press key is not use full.........")
@@ -314,7 +317,7 @@ while True:
  							press 1: Create new project
  							press 2: Show all the created projects
  							press 3: Add gitHub Url with oc project
- 							press 4: Git Pods...
+ 							press 4: Get Pods...
  							press 5: Get Deployments..
  							press 6: Get services.......
  							press 7: Get Build configure

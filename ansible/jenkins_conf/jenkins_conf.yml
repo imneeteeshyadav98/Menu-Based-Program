@@ -1,0 +1,22 @@
+- hosts: web
+  tasks:
+  - debug:
+      msg: Configure jenkins server
+  - name: Copy the Java software.
+    copy:
+      src: /root/Downloads/jdk-8u281-linux-x64.rpm
+      dest: /root/
+  - name: Copy jenkins software
+    copy:
+      src: /root/Downloads/jenkins-2.282-1.1.noarch.rpm
+      dest: /root/
+  - name: Install Jdk softawre..
+    shell: "yum install jdk-8u281-linux-x64.rpm -y"
+    ignore_errors: yes
+  - name: Install jenkis software......
+    shell: "yum install jenkins-2.282-1.1.noarch.rpm -y" 
+    ignore_errors: yes
+  - name: Strat jenkins service
+    service:
+      name: "jenkins"
+      state: started
