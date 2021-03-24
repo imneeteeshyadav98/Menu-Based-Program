@@ -1,0 +1,57 @@
+- hosts: localhost
+  vars:
+    - target_ip: cont.container.NetworkSettings.IPAddress
+  tasks:
+    - name: Docker Yum repository
+      yum_repository:
+        name: Docker repo
+        baseurl: https://download.docker.com/linux/centos/7/x86_64/stable/
+        enabled: True
+        description:  my docker repo
+        gpgcheck: no
+    - name: Install Docker software
+      command: "yum install docker-ce -y --nobest"
+    - name: Start docker service
+      service:
+        name: docker
+        state: started
+    - name: Install Python software version3.6
+      package:
+        name: python36
+        state: present
+    - name: install docker python modules
+      pip:
+        name: docker-py
+    - name: Download docker image on the docker Hub
+      docker_image:
+        name: zneetesh/centos-ssh:v2 
+        source: pull
+    - name: Run the docker container......
+      docker_container: 
+        name: centos-ssh-1
+        image: zneetesh/centos-ssh:v2
+        state: started
+        interactive: yes 
+        tty: yes
+      register: cont
+    - name: Find the Ip address of The container
+      debug:
+        var: cont.container.NetworkSettings.IPAddress
+    - name: Update the inventory
+      blockinfile:
+        path: "/etc/myhosts"
+        block: |
+              [docker_container]
+              {{ cont['container']['NetworkSettings']['IPAddress'] }} ansible_ssh_user=root ansible_ssh_pass=redhat ansible_ssh_connection=ssh
+        marker: ""
+
+
+- hosts: docker_container
+  tasks:
+    - name: Configure appache server
+      package:
+        name: httpd
+        state: present
+    - name: start service
+      command: /usr/sbin/httpd
+
